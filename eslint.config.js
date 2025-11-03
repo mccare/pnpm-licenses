@@ -1,10 +1,7 @@
+
 module.exports = {
-  ignorePatterns: ['dist/**/*', 'build/**/*'],
-  extends: [
-    'standard',
-    'plugin:@typescript-eslint/recommended',
-    'plugin:prettier/recommended'
-  ],
+  ignores: ['dist/**/*', 'build/**/*'],
+  extends: ['standard', 'plugin:@typescript-eslint/recommended', 'plugin:prettier/recommended'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: '2020'
@@ -16,15 +13,5 @@ module.exports = {
     'n/no-callback-literal': 'off',
     '@typescript-eslint/consistent-type-imports': ['error', { prefer: 'type-imports' }],
     '@typescript-eslint/no-use-before-define': 'error',
-    'prettier/prettier': [
-      'error',
-      {
-        tabWidth: 2,
-        printWidth: 120,
-        singleQuote: true,
-        trailingComma: 'none',
-        semi: false
-      }
-    ]
   }
 }

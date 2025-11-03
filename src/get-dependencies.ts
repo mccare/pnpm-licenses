@@ -71,9 +71,7 @@ const parse =
 
     const stringifiedInput = JSON.stringify(value, null, 2)
     const stringifiedError = JSON.stringify(result.error.format(), null, 2)
-    throw new Error(
-      `Failed to parse input, received the following:\n${stringifiedInput}\n\nThe type error was:\n${stringifiedError}`
-    )
+    throw new Error(`Failed to parse input, received the following:\n${stringifiedInput}\n\nThe type error was:\n${stringifiedError}`)
   }
 
 // special treatment for pnpm errors in the input
@@ -99,10 +97,7 @@ export type IOOptions = (
 ) &
   ({ stdout: true; outputFile: undefined } | { stdout: false; outputFile: string })
 
-export const getDependencies = (
-  options: { prod: boolean },
-  ioOptions: IOOptions
-): Promise<PnpmDependencyFlattened[]> => {
+export const getDependencies = (options: { prod: boolean }, ioOptions: IOOptions): Promise<PnpmDependencyFlattened[]> => {
   let inputPromise: Promise<string> | undefined
 
   if (ioOptions.stdin) {

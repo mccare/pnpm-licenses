@@ -1,0 +1,9 @@
+const config = {
+  trailingComma: 'none',
+  tabWidth: 2,
+  semi: false,
+  singleQuote: true,
+  printWidth: 140
+}
+
+module.exports = config

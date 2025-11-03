@@ -16,7 +16,9 @@ ${c.bold(c.white('commands'))}:
 
     ${c.white('--prod')}, ${c.white('-p')}                   Only consider production dependencies
     ${c.white('--json-input')}                 Read input from stdin as json, instead of calling pnpm ourselves
-    ${c.white('--json-input-file')}, ${c.white('-i')}        Read input from a (json) file, instead of calling pnpm ourselves or reading from stdin
+    ${c.white('--json-input-file')}, ${c.white(
+      '-i'
+    )}        Read input from a (json) file, instead of calling pnpm ourselves or reading from stdin
     ${c.white('--output-file')}, ${c.white('-o')}            Output to a file instead of stdout
     ${c.white('--filter')}, ${c.white('-f')}                 Filter out dependencies via glob patterns.
                                  Example: --filter='["@quantco/*", "@pnpm/*"]'
@@ -29,7 +31,9 @@ ${c.bold(c.white('commands'))}:
 
     ${c.white('--prod')}, ${c.white('-p')}                   Only consider production dependencies
     ${c.white('--json-input')}                 Read input from stdin as json, instead of calling pnpm ourselves
-    ${c.white('--json-input-file')}, ${c.white('-i')}        Read input from a (json) file, instead of calling pnpm ourselves or reading from stdin
+    ${c.white('--json-input-file')}, ${c.white(
+      '-i'
+    )}        Read input from a (json) file, instead of calling pnpm ourselves or reading from stdin
     ${c.white('--output-file')}, ${c.white('-o')}            Output to a file instead of stdout
     ${c.white('--filter')}, ${c.white('-f')}                 Filter out dependencies via glob patterns.
                                  Example: --filter='["@quantco/*", "@pnpm/*"]'
@@ -50,7 +54,9 @@ ${c.bold(c.white('options'))}:
   ${c.white('--prod')}, ${c.white('-p')}                   Only consider production dependencies
 
   ${c.white('--json-input')}                 Read input from stdin as json, instead of calling pnpm ourselves
-  ${c.white('--json-input-file')}, ${c.white('-i')}        Read input from a (json) file, instead of calling pnpm ourselves or reading from stdin
+  ${c.white('--json-input-file')}, ${c.white(
+    '-i'
+  )}        Read input from a (json) file, instead of calling pnpm ourselves or reading from stdin
   ${c.white('--output-file')}, ${c.white('-o')}            Output to a file instead of stdout
   ${c.white('--filter')}, ${c.white('-f')}                 Filter out dependencies via glob patterns.
                                Example: --filter='["@quantco/*", "@pnpm/*"]'
@@ -68,7 +74,9 @@ ${c.bold(c.white('options'))}:
   ${c.white('--prod')}, ${c.white('-p')}                   Only consider production dependencies
 
   ${c.white('--json-input')}                 Read input from stdin as json, instead of calling pnpm ourselves
-  ${c.white('--json-input-file')}, ${c.white('-i')}        Read input from a (json) file, instead of calling pnpm ourselves or reading from stdin
+  ${c.white('--json-input-file')}, ${c.white(
+    '-i'
+  )}        Read input from a (json) file, instead of calling pnpm ourselves or reading from stdin
   ${c.white('--output-file')}, ${c.white('-o')}            Output to a file instead of stdout
   ${c.white('--filter')}, ${c.white('-f')}                 Filter out dependencies via glob patterns.
                                Example: --filter='["@quantco/*", "@pnpm/*"]'
@@ -78,9 +86,7 @@ ${c.bold(c.white('options'))}:
 `.trim()
 /* eslint-enable prettier/prettier */
 
-const parseFilters = (
-  filtersAsJsonString: string
-): { success: false; error: string } | z.SafeParseSuccess<string[]> => {
+const parseFilters = (filtersAsJsonString: string): { success: false; error: string } | z.SafeParseSuccess<string[]> => {
   let jsonFilter
   try {
     jsonFilter = JSON.parse(filtersAsJsonString)

@@ -71,15 +71,15 @@ You'll receive a giant array of objects, each representing a dependency:
 
 ```ts
 type Dependency = {
-    name: string // from package.json
-    version: string // from package.json
-    path: string // file path to directory of dependency on disk
-    license: string // from package.json
-    author?: string | undefined // from package.json
-    homepage?: string | undefined // from package.json
-    description?: string | undefined // from package.json
-    additionalText?: string | undefined // set for dependencies with "public domain like" licences as a replacement for "Copyright (c) <author>"
-    licenseText: string | undefined // license text
+  name: string // from package.json
+  version: string // from package.json
+  path: string // file path to directory of dependency on disk
+  license: string // from package.json
+  author?: string | undefined // from package.json
+  homepage?: string | undefined // from package.json
+  description?: string | undefined // from package.json
+  additionalText?: string | undefined // set for dependencies with "public domain like" licences as a replacement for "Copyright (c) <author>"
+  licenseText: string | undefined // license text
 }
 ```
 
@@ -94,7 +94,6 @@ type Dependency = {
 --output-file, -o            Output to a file instead of stdout
 --filter, -f                 Filter out dependencies via glob patterns.
 ```
-
 
 ## Generate Disclaimer command
 
@@ -144,18 +143,12 @@ npx @quantco/pnpm-licenses generate-disclaimer --prod --filter='["@quantco/*", "
 --filter, -f                 Filter out dependencies via glob patterns.
 ```
 
-
 # API
 
 You can also use this as part of your own library using the programmatic api.
 
 ```ts
-import {
-  generateDisclaimer,
-  getDependencies,
-  getLicenseText,
-  resolveLicensesBestEffort
-} from '@quantco/pnpm-licenses/dist/api'
+import { generateDisclaimer, getDependencies, getLicenseText, resolveLicensesBestEffort } from '@quantco/pnpm-licenses/dist/api'
 import type { PnpmDependency, PnpmDependencyResolvedLicenseText } from '@quantco/pnpm-licenses/dist/api'
 ```
 
