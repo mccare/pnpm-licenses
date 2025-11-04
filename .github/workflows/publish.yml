@@ -1,100 +1,43 @@
-name: Publish
+name: Publish to internal registry
 on:
   push:
     branches:
-      - main
+      - forked_main
 
 jobs:
   publish:
-    strategy:
-      matrix:
-        packages:
-          # we want to publish this package both to npm (public) and to the github package registry (private)
-          # this ensures that it can be used even if the @quantco scope is set to use the github registry
-          - {
-              name: '@quantco/pnpm-licenses',
-              registry: 'https://registry.npmjs.org',
-              scope: '@quantco',
-              token_secret_name: 'NPM_TOKEN',
-              access: 'public'
-            }
-          - {
-              name: '@quantco/pnpm-licenses',
-              registry: 'https://npm.pkg.github.com',
-              scope: '@quantco',
-              token_secret_name: 'GITHUB_TOKEN',
-              access: 'internal'
-            }
     runs-on: ubuntu-latest
     permissions:
-      contents: read # this is needed by version-metadata
-      pull-requests: read # this is needed by version-metadata
+      id-token: write
+      contents: write
       packages: write
     steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@a7487c7e89a18df4991f7f222e4898a00d66ddda
+      - uses: actions/checkout@v5
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
-          version: 9.14.4
-      # Setup .npmrc file to publish to GitHub Packages
-      - uses: actions/setup-node@v4
-        with:
-          node-version: '22'
-          cache: 'pnpm'
-          registry-url: ${{ matrix.packages.registry }}
-          scope: ${{ matrix.packages.scope }}
-      - id: version-metadata
-        uses: Quantco/ui-actions/version-metadata@v1.0.8
-        with:
-          file: 'package.json'
-          token: ${{ secrets.GITHUB_TOKEN }}
-      - name: Determine last published version
-        id: last-published-version
+          node-version: 24
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+
+
+      - name: Authenticate with github npm repository
         run: |
-          set +e # disable pipefail, we handle errors and don't want to exit when one occurs
-          version=$(npm show $PACKAGE version)
-          if [ $? -eq 0 ]
-          then
-            echo "Last published version is $version"
-            echo "CI_HASNT_PUBLISHED_YET=false" >> $GITHUB_ENV
-            echo "CI_PUBLISHED_VERSION=$version" >> $GITHUB_ENV
-          else
-            echo "Determining last published version failed, falling back to 0.0.0"
-            echo "This should only happen if the package has never been published before."
-            echo "If it happens for any other reason you should investigate why it failed."
-            echo "CI_HASNT_PUBLISHED_YET=true" >> $GITHUB_ENV
-            echo "CI_PUBLISHED_VERSION=0.0.0" >> $GITHUB_ENV
-          fi
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets[matrix.packages.token_secret_name] }}
-          PACKAGE: ${{ matrix.packages.name }}
-      - name: Determine if a new version should be published
-        uses: Quantco/ui-actions/publish@v1.0.8
-        id: publish
-        with:
-          increment-type: pre-release
-          relevant-files: '[".github/**", "package.json", "readme.md", "LICENSE", ".eslintrc.js", "tsconfig.json", "tsup.config.ts", "remove-markdown.d.ts", "src"]'
-          package-json-file-path: 'package.json'
-          latest-registry-version: ${{ env.CI_PUBLISHED_VERSION }}
-          version-metadata-json: ${{ steps.version-metadata.outputs.json }}
-      - run: pnpm install
-        # github casts all outputs to strings, so evaluate against the string 'true' here :)
-        if: steps.publish.outputs.publish == 'true'
-      - run: 'pnpm build'
-        if: steps.publish.outputs.publish == 'true'
-      - name: publish npm package
-        if: steps.publish.outputs.publish == 'true'
+          npm set "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}"
+          npm set @mccare:registry=https://npm.pkg.github.com
+
+      - name: Build package
         run: |
-          echo "Publishing version ${{ steps.publish.outputs.version }}"
-          npm version --git-tag-version false --allow-same-version true ${{ steps.publish.outputs.version }}
-          # "--access public" is required for scoped packages when publishing for the first time
-          # as by default scoped packages are set to private (restricted)
-          # Opting to always specify "--access <...>" to avoid any issues, the access is configured
-          # on a per-registry basis in the matrix
-          npm publish --access ${{ matrix.packages.access }}
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets[matrix.packages.token_secret_name] }}
-      - name: Create action summary
+          git config --global user.email "$GITHUB_ACTOR@users.noreply.github.com"
+          git config --global user.name "Github Action"
+          pnpm version --no-git-tag-version patch
+          pnpm build
+
+      - name: Deploy Package to NPM
         run: |
-          echo "$SUMMARY" >> $GITHUB_STEP_SUMMARY
-        env: # this is required because bash/sh and backticks don't play nice together
-          SUMMARY: ${{ steps.publish.outputs.reason }}
+          pnpm publish --no-git-checks
+          currentVersion=$(jq -r '.version' < package.json)
+          git commit -am "Update to $currentVersion"
+          git push

@@ -1,14 +1,14 @@
 {
-  "name": "@quantco/pnpm-licenses",
-  "version": "2.2.1",
-  "description": "Generate third party license disclaimers in pnpm-based projects",
-  "homepage": "https://github.com/Quantco/pnpm-licenses",
+  "name": "@mccare/pnpm-licenses",
+  "version": "1.0.0",
+  "description": "Generate third party license disclaimers in pnpm-based projects, fork of https://github.com/quantco/pnpm-licenses",
+  "homepage": "https://github.com/mccare/pnpm-licenses",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Quantco/pnpm-licenses"
+    "url": "https://github.com/mccare/pnpm-licenses"
   },
   "bugs": {
-    "url": "https://github.com/Quantco/pnpm-licenses/issues"
+    "url": "https://github.com/mccare/pnpm-licenses/issues"
   },
   "files": [
     "dist",
