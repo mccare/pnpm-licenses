@@ -7,7 +7,6 @@ import { listCommand, generateDisclaimerCommand } from './index'
 
 const filtersSchema = z.array(z.string())
 
-/* eslint-disable prettier/prettier */
 const usage = `
 ${c.bold('usage')}: ${c.yellow('pnpm-licenses')} ${c.white('[command]')} ${c.white('[options]')}
 
@@ -84,7 +83,6 @@ ${c.bold(c.white('options'))}:
 
   ${c.white('--help')}                       Get help for the generate-disclaimer command
 `.trim()
-/* eslint-enable prettier/prettier */
 
 const parseFilters = (filtersAsJsonString: string): { success: false; error: string } | z.SafeParseSuccess<string[]> => {
   let jsonFilter
@@ -93,7 +91,7 @@ const parseFilters = (filtersAsJsonString: string): { success: false; error: str
   } catch (e) {
     return {
       success: false,
-      error: `Invalid value for filter flag, expected an array of strings encoded as JSON but received:\n${filtersAsJsonString}`
+      error: `Invalid value for filter flag, expected an array of strings encoded as JSON but received:\n${filtersAsJsonString}\nerror was ${e}`
     }
   }
 

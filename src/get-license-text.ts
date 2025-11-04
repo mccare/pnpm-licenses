@@ -7,7 +7,6 @@ import removeMarkdown from 'remove-markdown'
 import type { PnpmDependencyFlattened } from './get-dependencies'
 
 const LICENSE_BASENAMES = [
-  /* eslint-disable prettier/prettier */
   /^LICENSE$/i, // e.g. LICENSE
   /^LICENSE\.\w+$/i, // e.g. LICENSE.md
   /^LICENSE-\w+$/i, // e.g. LICENSE-MIT
@@ -22,7 +21,7 @@ const LICENSE_BASENAMES = [
   /^UNLICENCE$/i, // e.g. UNLICENCE
 
   /^COPYING$/i
-] /* eslint-enable prettier/prettier */
+]
 
 const README_BASENAMES = [
   /^readme$/i, // e.g. readme or README
@@ -35,7 +34,6 @@ const LICENSE_TEXT_SUBSTRINGS = {
   mit_license: /ermission is hereby granted, free of charge, to any/,
   bsd_license: /edistribution and use in source and binary forms, with or withou/,
   bsd_source_code_license: /edistribution and use of this software in source and binary forms, with or withou/,
-  // eslint-disable-next-line prettier/prettier
   cc0_1_0:
     /The\s+person\s+who\s+associated\s+a\s+work\s+with\s+this\s+deed\s+has\s+dedicated\s+the\s+work\s+to\s+the\s+public\s+domain\s+by\s+waiving\s+all\s+of\s+his\s+or\s+her\s+rights\s+to\s+the\s+work\s+worldwide\s+under\s+copyright\s+law,\s+including\s+all\s+related\s+and\s+neighboring\s+rights,\s+to\s+the\s+extent\s+allowed\s+by\s+law.\s+You\s+can\s+copy,\s+modify,\s+distribute\s+and\s+perform\s+the\s+work,\s+even\s+for\s+commercial\s+purposes,\s+all\s+without\s+asking\s+permission./i
 }
@@ -46,6 +44,7 @@ export class MissingLicenseError extends Error {
   }
 }
 
+// eslint-disable-next-line
 const resolvedByTypes = ['license-file', 'readme-search', 'fallback-author', 'fallback-homepage'] as const
 
 /**

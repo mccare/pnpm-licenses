@@ -36,6 +36,9 @@ export const listCommand = async (options: ListOptions, ioOptions: IOOptions) =>
   )
 
   const { successful, failed } = await resolveLicensesBestEffort(await deps)
+  for (const dep of failed) {
+    console.error(`Failed for ${dep}`)
+  }
 
   await output(JSON.stringify(successful, null, 2), ioOptions)
   process.exit(0)
@@ -47,6 +50,9 @@ export const generateDisclaimerCommand = async (options: GenerateDisclaimerOptio
   )
 
   const { successful, failed } = await resolveLicensesBestEffort(await deps)
+  for (const dep of failed) {
+    console.error(`Failed for ${dep}`)
+  }
 
   await output(generateDisclaimer(successful), ioOptions)
   process.exit(0)
